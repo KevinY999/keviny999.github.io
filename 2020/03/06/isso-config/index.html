@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="The blog will witness the growth of my work and my mental journey.">
+  <meta name="author" content="Kev1n Yang">
+  <meta name="keywords" content="">
+  <title>基于 CentOS 的 ISSO 评论系统后台搭建及修改全程记录 - KEV1N&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_ijqayz9ro8k.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1765250_8jkwj6t2msv.css">
+
+
+
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="KEV1N's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>KEV1N's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/atom.xml">
+              <i class="iconfont icon-rss-fill"></i>
+              RSS</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2020-03-06 06:04">
+                    星期五, 三月 6日 2020, 6:04 早上
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    4.1k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    78
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="iconfont icon-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <p>此文用于记录蛋疼的 isso 评论系统配置过程。</p>
+<a id="more"></a>
+
+<h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><p>1、安装基本环境</p>
+<pre><code class="hljs bash">yum -y update &amp;&amp; yum install -y wget vim git make automake autoconf gcc gcc-c++ pcre pcre-devel zlib zlib-devel openssl openssl-devel libtool python3 python3-devel</code></pre>
+
+<p>2、安装 nginx</p>
+<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~ \
+    &amp;&amp; wget http://nginx.org/download/nginx-1.16.1.tar.gz \
+    &amp;&amp; tar -zxvf nginx-1.16.1.tar.gz \
+    &amp;&amp; <span class="hljs-built_in">cd</span> nginx-1.16.1 \
+    &amp;&amp; mkdir -p /usr/<span class="hljs-built_in">local</span>/nginx \
+    &amp;&amp; ./configure --prefix=/usr/<span class="hljs-built_in">local</span>/nginx --with-http_ssl_module --with-http_stub_status_module --with-http_gzip_static_module --with-pcre \
+    &amp;&amp; make &amp;&amp; make install</code></pre>
+
+<p>3、安装 nodejs</p>
+<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~ \
+    &amp;&amp; wget https://nodejs.org/dist/v12.16.1/node-v12.16.1-linux-x64.tar.xz \
+    &amp;&amp; tar xvJf node-v12.16.1-linux-x64.tar.xz \
+    &amp;&amp; mv node-v12.16.1-linux-x64 /usr/<span class="hljs-built_in">local</span>/node</code></pre>
+
+<p>4、清理压缩包</p>
+<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> ~ \
+    &amp;&amp; rm -rf nginx-1.16.1 nginx-1.16.1.tar.gz \
+    &amp;&amp; rm -rf node-v12.16.1-linux-x64.tar.xz</code></pre>
+
+<p>5、设置环境变量</p>
+<pre><code class="hljs bash"><span class="hljs-built_in">export</span> NGINX_HOME=/usr/<span class="hljs-built_in">local</span>/nginx
+<span class="hljs-built_in">export</span> NODE_HOME=/usr/<span class="hljs-built_in">local</span>/node
+<span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$NGINX_HOME</span>/sbin:<span class="hljs-variable">$NODE_HOME</span>/bin:<span class="hljs-variable">$PATH</span></code></pre>
+
+<h2 id="配置并运行-nginx"><a href="#配置并运行-nginx" class="headerlink" title="配置并运行 nginx"></a>配置并运行 nginx</h2><p>1、配置 nginx</p>
+<pre><code class="hljs bash">vim /usr/<span class="hljs-built_in">local</span>/nginx/conf/nginx.conf</code></pre>
+
+<p><strong>nginx.conf</strong> 文件内容：</p>
+<pre><code class="hljs plain">#user  nobody;
+worker_processes  1;
+
+#error_log  logs&#x2F;error.log;
+#error_log  logs&#x2F;error.log  notice;
+#error_log  logs&#x2F;error.log  info;
+
+pid        logs&#x2F;nginx.pid;
+
+
+events &#123;
+    worker_connections  1024;
+&#125;
+
+
+http &#123;
+    include       mime.types;
+    default_type  application&#x2F;octet-stream;
+
+    #log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;
+    #                  &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;
+    #                  &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;
+
+    #access_log  logs&#x2F;access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    upstream isso &#123;
+        server 127.0.0.1:11006;
+    &#125;
+
+    server &#123;
+        listen       5000;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        access_log  logs&#x2F;localhost.access.log;
+        error_log   logs&#x2F;localhost.error.log;
+
+        location &#x2F;isso &#123;
+            proxy_set_header X-Script-Name &#x2F;isso;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Scheme $scheme;
+            proxy_pass http:&#x2F;&#x2F;isso;
+        &#125;
+
+        #error_page  404              &#x2F;404.html;
+
+        # redirect server error pages to the static page &#x2F;50x.html
+        #
+        error_page   500 502 503 504  &#x2F;50x.html;
+        location &#x3D; &#x2F;50x.html &#123;
+            root   html;
+        &#125;
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ &#123;
+        #    proxy_pass   http:&#x2F;&#x2F;127.0.0.1;
+        #&#125;
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ &#123;
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  &#x2F;scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #&#125;
+
+        # deny access to .htaccess files, if Apache&#39;s document root
+        # concurs with nginx&#39;s one
+        #
+        #location ~ &#x2F;\.ht &#123;
+        #    deny  all;
+        #&#125;
+    &#125;
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server &#123;
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location &#x2F; &#123;
+    #        root   html;
+    #        index  index.html index.htm;
+    #    &#125;
+    #&#125;
+
+
+    # HTTPS server
+    #
+    #server &#123;
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location &#x2F; &#123;
+    #        root   html;
+    #        index  index.html index.htm;
+    #    &#125;
+    #&#125;
+
+&#125;</code></pre>
+
+<p>2、运行 nginx</p>
+<pre><code class="hljs bash">/usr/<span class="hljs-built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="hljs-built_in">local</span>/nginx/conf/nginx.conf</code></pre>
+
+<p>3、重启 nginx</p>
+<pre><code class="hljs bash">/usr/<span class="hljs-built_in">local</span>/nginx/sbin/nginx -s reload</code></pre>
+
+<p>4、停止 nginx</p>
+<pre><code class="hljs bash">/usr/<span class="hljs-built_in">local</span>/nginx/sbin/nginx -s stop</code></pre>
+
+<h2 id="安装-python-的-virtualenv-模块"><a href="#安装-python-的-virtualenv-模块" class="headerlink" title="安装 python 的 virtualenv 模块"></a>安装 python 的 virtualenv 模块</h2><pre><code class="hljs bash">pip3 install virtualenv</code></pre>
+
+<h2 id="从源码安装-isso"><a href="#从源码安装-isso" class="headerlink" title="从源码安装 isso"></a>从源码安装 isso</h2><p>1、将 isso 从 github 克隆到本地</p>
+<pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/posativ/isso.git /usr/<span class="hljs-built_in">local</span>/isso
+<span class="hljs-built_in">cd</span> /usr/<span class="hljs-built_in">local</span>/isso</code></pre>
+
+<p>2、建立 python3 虚拟环境</p>
+<pre><code class="hljs bash">virtualenv .
+<span class="hljs-built_in">source</span> ./bin/activate</code></pre>
+
+<p>3、安装必要 python 第三方库</p>
+<pre><code class="hljs bash">pip install flask cffi webencodings six</code></pre>
+
+<p>4、安装 isso</p>
+<pre><code class="hljs bash">python setup.py develop</code></pre>
+
+<p>5、使用 npm 安装 bower</p>
+<pre><code class="hljs bash">npm install -g bower</code></pre>
+
+<p>6、安装 javascript 模块</p>
+<pre><code class="hljs bash">make init</code></pre>
+
+<p>7、安装其他几个 js 工具</p>
+<pre><code class="hljs bash">npm install -g requirejs uglify-js jade</code></pre>
+
+<p>8、修改 isso 源码，以修改即将生成的 <strong>embed.min.js</strong> 文件的内容，实现隐藏 website 输入框、preview 按钮、 edit 按钮以及 preview 界面的目的</p>
+<pre><code class="hljs bash">vim isso/js/app/text/postbox.jade</code></pre>
+
+<p>为需要修改的部分添加 <code>style={display: &#39;none&#39;}</code> 字符串以隐藏该元素。</p>
+<p><strong>isso/js/app/text/postbox.jade</strong> 文件内容如下：</p>
+<pre><code class="hljs plain">div(class&#x3D;&#39;isso-postbox&#39;)
+    div(class&#x3D;&#39;form-wrapper&#39;)
+        div(class&#x3D;&#39;textarea-wrapper&#39;)
+            div(class&#x3D;&#39;textarea placeholder&#39; contenteditable&#x3D;&#39;true&#39;)
+                &#x3D; i18n(&#39;postbox-text&#39;)
+            div(class&#x3D;&#39;preview&#39; style&#x3D;&#123;display: &#39;none&#39;&#125;)
+                div(class&#x3D;&#39;isso-comment&#39;)
+                    div(class&#x3D;&#39;text-wrapper&#39;)
+                        div(class&#x3D;&#39;text&#39;)
+        section(class&#x3D;&#39;auth-section&#39;)
+            p(class&#x3D;&#39;input-wrapper&#39;)
+                input(type&#x3D;&#39;text&#39; name&#x3D;&#39;author&#39; placeholder&#x3D;i18n(&#39;postbox-author&#39;)
+                      value&#x3D;author !&#x3D;&#x3D; null ? &#39;#&#123;author&#125;&#39; : &#39;&#39;)
+            p(class&#x3D;&#39;input-wrapper&#39;)
+                input(type&#x3D;&#39;email&#39; name&#x3D;&#39;email&#39; placeholder&#x3D;i18n(&#39;postbox-email&#39;)
+                      value&#x3D;email !&#x3D; null ? &#39;#&#123;email&#125;&#39; : &#39;&#39;)
+            p(class&#x3D;&#39;input-wrapper&#39; style&#x3D;&#123;display: &#39;none&#39;&#125;)
+                input(type&#x3D;&#39;text&#39; name&#x3D;&#39;website&#39; placeholder&#x3D;i18n(&#39;postbox-website&#39;)
+                      value&#x3D;website !&#x3D; null ? &#39;#&#123;website&#125;&#39; : &#39;&#39;)
+            p(class&#x3D;&#39;post-action&#39;)
+                input(type&#x3D;&#39;submit&#39; value&#x3D;i18n(&#39;postbox-submit&#39;))
+            p(class&#x3D;&#39;post-action&#39; style&#x3D;&#123;display: &#39;none&#39;&#125;)
+                input(type&#x3D;&#39;button&#39; name&#x3D;&#39;preview&#39;
+                      value&#x3D;i18n(&#39;postbox-preview&#39;))
+            p(class&#x3D;&#39;post-action&#39; style&#x3D;&#123;display: &#39;none&#39;&#125;)
+                input(type&#x3D;&#39;button&#39; name&#x3D;&#39;edit&#39;
+                      value&#x3D;i18n(&#39;postbox-edit&#39;))
+        section(class&#x3D;&#39;notification-section&#39;)
+                label
+                    input(type&#x3D;&#39;checkbox&#39; name&#x3D;&#39;notification&#39;)
+                    &#x3D; i18n(&#39;postbox-notification&#39;)</code></pre>
+
+<p>9、为 isso 添加配置文件 (<a href="https://posativ.org/isso/docs/configuration/server/" target="_blank" rel="noopener">文档</a>)</p>
+<pre><code class="hljs bash">vim /etc/isso.conf</code></pre>
+
+<p><strong>isso.conf</strong> 文件内容如下：</p>
+<pre><code class="hljs plain">[general]
+dbpath &#x3D; &#x2F;var&#x2F;lib&#x2F;isso&#x2F;comments.db
+host &#x3D; http:&#x2F;&#x2F;localhost:4000&#x2F;
+
+[server]
+listen &#x3D; http:&#x2F;&#x2F;localhost:11006&#x2F;</code></pre>
+
+<p>10、创建文件夹</p>
+<pre><code class="hljs bash">mkdir -p /var/lib/isso</code></pre>
+
+<p>11、生成 js 文件</p>
+<pre><code class="hljs bash">make js</code></pre>
+
+<p>12、运行 isso</p>
+<pre><code class="hljs bash">bin/isso -c /etc/isso.conf</code></pre>
+
+<h2 id="使用-supervisor-管理-isso"><a href="#使用-supervisor-管理-isso" class="headerlink" title="使用 supervisor 管理 isso"></a>使用 supervisor 管理 isso</h2><p>1、使用 pip 工具安装 supervisor</p>
+<pre><code class="hljs bash">pip3 install supervisor</code></pre>
+
+<p>2、创建文件夹</p>
+<pre><code class="hljs bash">mkdir -p /etc/supervisor/conf.d
+mkdir -p /var/<span class="hljs-built_in">log</span>/isso</code></pre>
+
+<p>3、编写 supervisor 主配置文件</p>
+<pre><code class="hljs bash">vim /etc/supervisor/supervisord.conf</code></pre>
+
+<p><strong>supervisord.conf</strong> 文件的内容如下：</p>
+<pre><code class="hljs plain">; Sample supervisor config file.
+;
+; For more information on the config file, please see:
+; http:&#x2F;&#x2F;supervisord.org&#x2F;configuration.html
+;
+; Notes:
+;  - Shell expansion (&quot;~&quot; or &quot;$HOME&quot;) is not supported.  Environment
+;    variables can be expanded using this syntax: &quot;%(ENV_HOME)s&quot;.
+;  - Quotes around values are not supported, except in the case of
+;    the environment&#x3D; options as shown below.
+;  - Comments must have a leading space: &quot;a&#x3D;b ;comment&quot; not &quot;a&#x3D;b;comment&quot;.
+;  - Command will be truncated if it looks like a config file comment, e.g.
+;    &quot;command&#x3D;bash -c &#39;foo ; bar&#39;&quot; will truncate to &quot;command&#x3D;bash -c &#39;foo &quot;.
+;
+; Warning:
+;  Paths throughout this example file use &#x2F;tmp because it is available on most
+;  systems.  You will likely need to change these to locations more appropriate
+;  for your system.  Some systems periodically delete older files in &#x2F;tmp.
+;  Notably, if the socket file defined in the [unix_http_server] section below
+;  is deleted, supervisorctl will be unable to connect to supervisord.
+
+[unix_http_server]
+file&#x3D;&#x2F;tmp&#x2F;supervisor.sock   ; the path to the socket file
+;chmod&#x3D;0700                 ; socket file mode (default 0700)
+;chown&#x3D;nobody:nogroup       ; socket file uid:gid owner
+;username&#x3D;user              ; default is no username (open server)
+;password&#x3D;123               ; default is no password (open server)
+
+; Security Warning:
+;  The inet HTTP server is not enabled by default.  The inet HTTP server is
+;  enabled by uncommenting the [inet_http_server] section below.  The inet
+;  HTTP server is intended for use within a trusted environment only.  It
+;  should only be bound to localhost or only accessible from within an
+;  isolated, trusted network.  The inet HTTP server does not support any
+;  form of encryption.  The inet HTTP server does not use authentication
+;  by default (see the username&#x3D; and password&#x3D; options to add authentication).
+;  Never expose the inet HTTP server to the public internet.
+
+;[inet_http_server]         ; inet (TCP) server disabled by default
+;port&#x3D;127.0.0.1:9001        ; ip_address:port specifier, *:port for all iface
+;username&#x3D;user              ; default is no username (open server)
+;password&#x3D;123               ; default is no password (open server)
+
+[supervisord]
+logfile&#x3D;&#x2F;tmp&#x2F;supervisord.log ; main log file; default $CWD&#x2F;supervisord.log
+logfile_maxbytes&#x3D;50MB        ; max main logfile bytes b4 rotation; default 50MB
+logfile_backups&#x3D;10           ; # of main logfile backups; 0 means none, default 10
+loglevel&#x3D;info                ; log level; default info; others: debug,warn,trace
+pidfile&#x3D;&#x2F;tmp&#x2F;supervisord.pid ; supervisord pidfile; default supervisord.pid
+nodaemon&#x3D;false               ; start in foreground if true; default false
+minfds&#x3D;1024                  ; min. avail startup file descriptors; default 1024
+minprocs&#x3D;200                 ; min. avail process descriptors;default 200
+;umask&#x3D;022                   ; process file creation umask; default 022
+;user&#x3D;supervisord            ; setuid to this UNIX account at startup; recommended if root
+;identifier&#x3D;supervisor       ; supervisord identifier, default is &#39;supervisor&#39;
+;directory&#x3D;&#x2F;tmp              ; default is not to cd during start
+;nocleanup&#x3D;true              ; don&#39;t clean up tempfiles at start; default false
+;childlogdir&#x3D;&#x2F;tmp            ; &#39;AUTO&#39; child log dir, default $TEMP
+;environment&#x3D;KEY&#x3D;&quot;value&quot;     ; key value pairs to add to environment
+;strip_ansi&#x3D;false            ; strip ansi escape codes in logs; def. false
+
+; The rpcinterface:supervisor section must remain in the config file for
+; RPC (supervisorctl&#x2F;web interface) to work.  Additional interfaces may be
+; added by defining them in separate [rpcinterface:x] sections.
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory &#x3D; supervisor.rpcinterface:make_main_rpcinterface
+
+; The supervisorctl section configures how supervisorctl will connect to
+; supervisord.  configure it match the settings in either the unix_http_server
+; or inet_http_server section.
+
+[supervisorctl]
+serverurl&#x3D;unix:&#x2F;&#x2F;&#x2F;tmp&#x2F;supervisor.sock ; use a unix:&#x2F;&#x2F; URL  for a unix socket
+;serverurl&#x3D;http:&#x2F;&#x2F;127.0.0.1:9001 ; use an http:&#x2F;&#x2F; url to specify an inet socket
+;username&#x3D;chris              ; should be same as in [*_http_server] if set
+;password&#x3D;123                ; should be same as in [*_http_server] if set
+;prompt&#x3D;mysupervisor         ; cmd line prompt (default &quot;supervisor&quot;)
+;history_file&#x3D;~&#x2F;.sc_history  ; use readline history if available
+
+; The sample program section below shows all possible program subsection values.
+; Create one or more &#39;real&#39; program: sections to be able to control them under
+; supervisor.
+
+;[program:theprogramname]
+;command&#x3D;&#x2F;bin&#x2F;cat              ; the program (relative uses PATH, can take args)
+;process_name&#x3D;%(program_name)s ; process_name expr (default %(program_name)s)
+;numprocs&#x3D;1                    ; number of processes copies to start (def 1)
+;directory&#x3D;&#x2F;tmp                ; directory to cwd to before exec (def no cwd)
+;umask&#x3D;022                     ; umask for process (default None)
+;priority&#x3D;999                  ; the relative start priority (default 999)
+;autostart&#x3D;true                ; start at supervisord start (default: true)
+;startsecs&#x3D;1                   ; # of secs prog must stay up to be running (def. 1)
+;startretries&#x3D;3                ; max # of serial start failures when starting (default 3)
+;autorestart&#x3D;unexpected        ; when to restart if exited after running (def: unexpected)
+;exitcodes&#x3D;0                   ; &#39;expected&#39; exit codes used with autorestart (default 0)
+;stopsignal&#x3D;QUIT               ; signal used to kill process (default TERM)
+;stopwaitsecs&#x3D;10               ; max num secs to wait b4 SIGKILL (default 10)
+;stopasgroup&#x3D;false             ; send stop signal to the UNIX process group (default false)
+;killasgroup&#x3D;false             ; SIGKILL the UNIX process group (def false)
+;user&#x3D;chrism                   ; setuid to this UNIX account to run the program
+;redirect_stderr&#x3D;true          ; redirect proc stderr to stdout (default false)
+;stdout_logfile&#x3D;&#x2F;a&#x2F;path        ; stdout log path, NONE for none; default AUTO
+;stdout_logfile_maxbytes&#x3D;1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stdout_logfile_backups&#x3D;10     ; # of stdout logfile backups (0 means none, default 10)
+;stdout_capture_maxbytes&#x3D;1MB   ; number of bytes in &#39;capturemode&#39; (default 0)
+;stdout_events_enabled&#x3D;false   ; emit events on stdout writes (default false)
+;stdout_syslog&#x3D;false           ; send stdout to syslog with process name (default false)
+;stderr_logfile&#x3D;&#x2F;a&#x2F;path        ; stderr log path, NONE for none; default AUTO
+;stderr_logfile_maxbytes&#x3D;1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stderr_logfile_backups&#x3D;10     ; # of stderr logfile backups (0 means none, default 10)
+;stderr_capture_maxbytes&#x3D;1MB   ; number of bytes in &#39;capturemode&#39; (default 0)
+;stderr_events_enabled&#x3D;false   ; emit events on stderr writes (default false)
+;stderr_syslog&#x3D;false           ; send stderr to syslog with process name (default false)
+;environment&#x3D;A&#x3D;&quot;1&quot;,B&#x3D;&quot;2&quot;       ; process environment additions (def no adds)
+;serverurl&#x3D;AUTO                ; override serverurl computation (childutils)
+
+; The sample eventlistener section below shows all possible eventlistener
+; subsection values.  Create one or more &#39;real&#39; eventlistener: sections to be
+; able to handle event notifications sent by supervisord.
+
+;[eventlistener:theeventlistenername]
+;command&#x3D;&#x2F;bin&#x2F;eventlistener    ; the program (relative uses PATH, can take args)
+;process_name&#x3D;%(program_name)s ; process_name expr (default %(program_name)s)
+;numprocs&#x3D;1                    ; number of processes copies to start (def 1)
+;events&#x3D;EVENT                  ; event notif. types to subscribe to (req&#39;d)
+;buffer_size&#x3D;10                ; event buffer queue size (default 10)
+;directory&#x3D;&#x2F;tmp                ; directory to cwd to before exec (def no cwd)
+;umask&#x3D;022                     ; umask for process (default None)
+;priority&#x3D;-1                   ; the relative start priority (default -1)
+;autostart&#x3D;true                ; start at supervisord start (default: true)
+;startsecs&#x3D;1                   ; # of secs prog must stay up to be running (def. 1)
+;startretries&#x3D;3                ; max # of serial start failures when starting (default 3)
+;autorestart&#x3D;unexpected        ; autorestart if exited after running (def: unexpected)
+;exitcodes&#x3D;0                   ; &#39;expected&#39; exit codes used with autorestart (default 0)
+;stopsignal&#x3D;QUIT               ; signal used to kill process (default TERM)
+;stopwaitsecs&#x3D;10               ; max num secs to wait b4 SIGKILL (default 10)
+;stopasgroup&#x3D;false             ; send stop signal to the UNIX process group (default false)
+;killasgroup&#x3D;false             ; SIGKILL the UNIX process group (def false)
+;user&#x3D;chrism                   ; setuid to this UNIX account to run the program
+;redirect_stderr&#x3D;false         ; redirect_stderr&#x3D;true is not allowed for eventlisteners
+;stdout_logfile&#x3D;&#x2F;a&#x2F;path        ; stdout log path, NONE for none; default AUTO
+;stdout_logfile_maxbytes&#x3D;1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stdout_logfile_backups&#x3D;10     ; # of stdout logfile backups (0 means none, default 10)
+;stdout_events_enabled&#x3D;false   ; emit events on stdout writes (default false)
+;stdout_syslog&#x3D;false           ; send stdout to syslog with process name (default false)
+;stderr_logfile&#x3D;&#x2F;a&#x2F;path        ; stderr log path, NONE for none; default AUTO
+;stderr_logfile_maxbytes&#x3D;1MB   ; max # logfile bytes b4 rotation (default 50MB)
+;stderr_logfile_backups&#x3D;10     ; # of stderr logfile backups (0 means none, default 10)
+;stderr_events_enabled&#x3D;false   ; emit events on stderr writes (default false)
+;stderr_syslog&#x3D;false           ; send stderr to syslog with process name (default false)
+;environment&#x3D;A&#x3D;&quot;1&quot;,B&#x3D;&quot;2&quot;       ; process environment additions
+;serverurl&#x3D;AUTO                ; override serverurl computation (childutils)
+
+; The sample group section below shows all possible group values.  Create one
+; or more &#39;real&#39; group: sections to create &quot;heterogeneous&quot; process groups.
+
+;[group:thegroupname]
+;programs&#x3D;progname1,progname2  ; each refers to &#39;x&#39; in [program:x] definitions
+;priority&#x3D;999                  ; the relative start priority (default 999)
+
+; The [include] section can just contain the &quot;files&quot; setting.  This
+; setting can list multiple files (separated by whitespace or
+; newlines).  It can also contain wildcards.  The filenames are
+; interpreted as relative to this file.  Included files *cannot*
+; include files themselves.
+
+[include]
+files &#x3D; &#x2F;etc&#x2F;supervisor&#x2F;conf.d&#x2F;*.conf</code></pre>
+
+<p>4、编辑 supervisor 对于 isso 的专属配置文件</p>
+<pre><code class="hljs bash">vim /etc/supervisor/conf.d/isso.conf</code></pre>
+
+<p><strong>isso.conf</strong> 文件的内容如下：</p>
+<pre><code class="hljs plain">[program:isso]
+command&#x3D;&#x2F;usr&#x2F;local&#x2F;isso&#x2F;bin&#x2F;isso -c &#x2F;etc&#x2F;isso.conf run
+directory&#x3D;&#x2F;var&#x2F;lib&#x2F;isso
+user&#x3D;root
+autorestart&#x3D;true
+stdout_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;isso&#x2F;access.log
+stderr_logfile&#x3D;&#x2F;var&#x2F;log&#x2F;isso&#x2F;error.log
+loglevel&#x3D;info
+environment&#x3D;LANG&#x3D;&quot;en_US.UTF-8&quot;</code></pre>
+
+<p>5、启动 supervisord 服务</p>
+<pre><code class="hljs bash">supervisord -c /etc/supervisor/supervisord.conf</code></pre>
+
+<p>6、管理 supervisor 中的 isso</p>
+<p><strong>启动</strong>: <code>supervisorctl start isso</code></p>
+<p><strong>重启</strong>: <code>supervisorctl restart isso</code></p>
+<p><strong>停止</strong>: <code>supervisorctl stop isso</code></p>
+<h2 id="访问-isso-服务"><a href="#访问-isso-服务" class="headerlink" title="访问 isso 服务"></a>访问 isso 服务</h2><pre><code class="hljs bash">curl http://localhost:5000/isso</code></pre>
+
+<h2 id="修改-hexo-下-icarus-主题"><a href="#修改-hexo-下-icarus-主题" class="headerlink" title="修改 hexo 下 icarus 主题"></a>修改 hexo 下 icarus 主题</h2><p>1、增加 isso.css 样式表文件</p>
+<pre><code class="hljs bash">vim themes/icarus/<span class="hljs-built_in">source</span>/css/isso.css</code></pre>
+
+<p><strong>isso.css</strong> 文件的内容如下：</p>
+<pre><code class="hljs plain">#isso-thread h4 &#123;
+    margin: 1em 0;
+    font-weight: bold;
+    font-size: 1.5em;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .textarea-wrapper &gt; .textarea &#123;
+    width: 100%;
+    height: auto;
+    min-height: 8em;
+    overflow-y: scroll;
+    resize: none;
+    outline: none;
+    -webkit-user-modify: read-write-plaintext-only;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .auth-section &#123;
+    width: 100%;
+    height: 3rem;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+    margin: .6rem 0;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .auth-section p &#123;
+    flex: 1;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .auth-section &gt; .input-wrapper &#123;
+    margin-right: .6rem;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .auth-section &gt; p &gt; input &#123;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: .6rem .8rem;
+    font-size: 14px;
+    border-radius: .2rem;
+    outline: none;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .auth-section &gt; .input-wrapper  input &#123;
+    background: #fafafa;
+    border: .1rem solid #eee;
+    cursor: text;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .auth-section &gt; .post-action  input &#123;
+    background: #2687fb;
+    border: .1rem solid #177ffb;
+    color: #fff;
+    cursor: pointer;
+&#125;
+.isso-postbox &gt; .form-wrapper &gt; .notification-section input &#123;
+    margin-right: .3rem;
+&#125;
+#isso-root .isso-comment &#123;
+    max-width: 68em;
+    padding-top: 0.95em;
+    margin: 0.95em auto;
+&#125;
+.isso-comment &gt; div.avatar &#123;
+    display: block;
+    float: left;
+    width: 7%;
+    margin: 3px 15px 0 0;
+&#125;
+.isso-comment &gt; div.avatar &gt; svg &#123;
+    max-width: 48px;
+    max-height: 48px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+&#125;
+
+.isso-comment &gt; div.text-wrapper &#123;
+    display: block;
+&#125;
+.isso-comment .isso-follow-up &#123;
+    padding-left: calc(7% + 20px);
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header, .isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer &#123;
+    font-size: 0.95em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header &#123;
+    font-size: 0.85em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .spacer &#123;
+    padding: 0 6px;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .spacer,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header a.permalink,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .note,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header a.parent &#123;
+    color: gray !important;
+    font-weight: normal;
+    text-shadow: none !important;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .spacer:hover,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header a.permalink:hover,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .note:hover,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header a.parent:hover &#123;
+    color: #606060 !important;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .note &#123;
+    float: right;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-header .author &#123;
+    font-weight: bold;
+    color: #555;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .textarea-wrapper .textarea,
+.isso-comment &gt; div.text-wrapper &gt; .textarea-wrapper .preview &#123;
+    margin-top: 0.2em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; div.text p &#123;
+    margin-top: 0.2em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; div.text p:last-child &#123;
+    margin-bottom: 0.2em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; div.text h1,
+.isso-comment &gt; div.text-wrapper &gt; div.text h2,
+.isso-comment &gt; div.text-wrapper &gt; div.text h3,
+.isso-comment &gt; div.text-wrapper &gt; div.text h4,
+.isso-comment &gt; div.text-wrapper &gt; div.text h5,
+.isso-comment &gt; div.text-wrapper &gt; div.text h6 &#123;
+    font-size: 130%;
+    font-weight: bold;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; div.textarea-wrapper .textarea,
+.isso-comment &gt; div.text-wrapper &gt; div.textarea-wrapper .preview &#123;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+    border-radius: 2px;
+    box-shadow: 0 0 2px #888;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer &#123;
+    font-size: 0.80em;
+    color: gray !important;
+    clear: left;
+&#125;
+.isso-feedlink,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer a &#123;
+    font-weight: bold;
+    text-decoration: none;
+&#125;
+.isso-feedlink:hover,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer a:hover &#123;
+    color: #111111 !important;
+    text-shadow: #aaaaaa 0 0 1px !important;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer &gt; a &#123;
+    position: relative;
+    top: .2em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer &gt; a + a &#123;
+    padding-left: 1em;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer .votes &#123;
+    color: gray;
+&#125;
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer .upvote svg,
+.isso-comment &gt; div.text-wrapper &gt; .isso-comment-footer .downvote svg &#123;
+    position: relative;
+    top: .2em;
+&#125;
+.isso-comment .isso-postbox &#123;
+    margin-top: 0.8em;
+&#125;
+.isso-comment.isso-no-votes span.votes &#123;
+    display: none;
+&#125;</code></pre>
+
+<p>2、修改 isso.ejs 这一 isso 布局文件</p>
+<pre><code class="hljs bash">vim themes/icarus/layout/comment/isso.ejs</code></pre>
+
+<p><strong>isso.ejs</strong> 文件的内容如下：</p>
+<pre><code class="hljs plain">&lt;% if (!has_config(&#39;comment.url&#39;)) &#123; %&gt;
+&lt;div class&#x3D;&quot;notification is-danger&quot;&gt;
+    You forgot to set the &lt;code&gt;url&lt;&#x2F;code&gt; for Isso. Please set it in &lt;code&gt;_config.yml&lt;&#x2F;code&gt;.
+&lt;&#x2F;div&gt;
+&lt;% &#125; else &#123; %&gt;
+&lt;%- _css(&#39;css&#x2F;isso&#39;) %&gt;
+&lt;script data-isso&#x3D;&quot;&#x2F;&#x2F;&lt;%&#x3D; get_config(&#39;comment.url&#39;) %&gt;&quot;
+    data-isso-css&#x3D;&quot;false&quot;
+    data-isso-lang&#x3D;&quot;zh&quot;
+    data-isso-reply-to-self&#x3D;&quot;true&quot;
+    data-isso-require-author&#x3D;&quot;true&quot;
+    data-isso-reply-notifications&#x3D;&quot;true&quot;
+    src&#x3D;&quot;&#x2F;&#x2F;&lt;%&#x3D; get_config(&#39;comment.url&#39;) %&gt;&#x2F;js&#x2F;embed.min.js&quot;&gt;
+&lt;&#x2F;script&gt;
+&lt;section id&#x3D;&quot;isso-thread&quot; data-title&#x3D;&quot;&lt;%&#x3D; post.title %&gt;&quot;&gt;&lt;&#x2F;section&gt;
+&lt;% &#125; %&gt;</code></pre>
+
+<p>3、修改 icarus 主题的 _config.yml 文件，添加 isso 的相关配置 (<a href="https://blog.zhangruipeng.me/hexo-theme-icarus/categories/Plugins/Comment/" target="_blank" rel="noopener">文档</a>)</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%8D%9A%E5%AE%A2/">博客</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Nginx/">Nginx</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Python3/">Python3</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Isso/">Isso</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Node/">Node</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Supervisor/">Supervisor</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="nofollow noopener noopener">CC BY-NC-ND 4.0 许可协议</a>。转载请注明来自 <a href="https://www.keviny.site/">Kev1n's Blog</a>！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/22/Huawei-mirror-live/">
+                        <span class="hidden-mobile">基于Airserver的Huawei手机简易投屏直播服务搭建过程全记录</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="KevinY999/keviny999.github.io"
+          issue-term="title"
+  
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <span>驱动: </span>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <span>主题: </span>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span>
+      </a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143604803-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "基于 CentOS 的 ISSO 评论系统后台搭建及修改全程记录&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

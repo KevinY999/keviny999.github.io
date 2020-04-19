@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="The blog will witness the growth of my work and my mental journey.">
+  <meta name="author" content="Kev1n Yang">
+  <meta name="keywords" content="">
+  <title>RabbitMQ官方系列教程[翻译] - 3. Publish / Subscribe (Python版) - KEV1N&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+<link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.18.1/styles/github-gist.min.css" />
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_fmb4a04yx8h.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_ijqayz9ro8k.css">
+
+
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1765250_8jkwj6t2msv.css">
+
+
+
+<meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="KEV1N's Blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>KEV1N's Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="iconfont icon-home-fill"></i>
+              首页</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/archives/">
+              <i class="iconfont icon-archive-fill"></i>
+              归档</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/categories/">
+              <i class="iconfont icon-category-fill"></i>
+              分类</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/tags/">
+              <i class="iconfont icon-tags-fill"></i>
+              标签</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/about/">
+              <i class="iconfont icon-user-fill"></i>
+              关于</a>
+          </li>
+        
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/atom.xml">
+              <i class="iconfont icon-rss-fill"></i>
+              RSS</a>
+          </li>
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+                <div class="mt-3 post-meta">
+                  <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+                  <time datetime="2019-09-22 00:46">
+                    星期日, 九月 22日 2019, 12:46 凌晨
+                  </time>
+                </div>
+              
+
+              <div class="mt-1">
+                
+                  
+                  <span class="post-meta mr-2">
+                    <i class="iconfont icon-chart"></i>
+                    2.3k 字
+                  </span>
+                
+
+                
+                  
+                  <span class="post-meta mr-2">
+                      <i class="iconfont icon-clock-fill"></i>
+                    
+                    
+                    26
+                     分钟
+                  </span>
+                
+
+                
+                  <!-- 不蒜子统计文章PV -->
+                  
+                  <span id="busuanzi_container_page_pv" class="post-meta" style="display: none">
+                    <i class="iconfont icon-eye" aria-hidden="true"></i>
+                    <span id="busuanzi_value_page_pv"></span> 次
+                  </span>
+                
+              </div>
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-three-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-three-python.html</a></p>
+<a id="more"></a>
+
+<blockquote>
+<h3 id="预先准备"><a href="#预先准备" class="headerlink" title="预先准备"></a>预先准备</h3><p>这篇教程假定 RabbitMQ 已经完成<a href="https://www.rabbitmq.com/download.html" target="_blank" rel="noopener">安装</a>并且运行在 <code>localhost</code> 及标准端口 <code>5672</code> 上。如果你使用了一个不同的主机地址、端口或者凭据，则需要依此调整一下连接设置。</p>
+</blockquote>
+<h2 id="预先准备-1"><a href="#预先准备-1" class="headerlink" title="预先准备"></a>预先准备</h2><p>与其他 Python 教程一样，我们将使用版本号为 <a href="https://pika.readthedocs.io/en/stable/" target="_blank" rel="noopener">1.0.0</a> 的 <a href="https://pypi.python.org/pypi/pika" target="_blank" rel="noopener">Pika</a> RabbitMQ 客户端。</p>
+<h2 id="本章重点"><a href="#本章重点" class="headerlink" title="本章重点"></a>本章重点</h2><p>在<a href="https://www.keviny.site/2019/09/21/RabbitMQ-official-tutorials-2/">上一篇教程</a>里我们建立了一个工作队列。工作队列背后的假设是，每个任务都会被传递给一个工人。在这部分，我们会做一点完全不一样的事 – 我们会将一条消息发送给多个消费者。这种模式称为 <strong>“publish/subscribe (发布/订阅)”</strong> 。</p>
+<p>为了说明这种模式，我们要构建一个简单的日志系统。它由两个程序组成 – 第一个程序会发出日志消息，第二个程序则接收并打印这些消息。</p>
+<p>在我们的日志系统中，接收程序的每个运行副本都将收到消息。这样，我们就能够运行一个接收器并将日志定向到磁盘中；同时运行另一个接收器并在屏幕上查看日志。</p>
+<p>从本质上说，发布出去的日志消息会被广播给所有的接收者。</p>
+<h2 id="交换器"><a href="#交换器" class="headerlink" title="交换器"></a>交换器</h2><p>在本教程的前面部分我们向一个队列发送消息并从中接收消息。现在是时候来介绍一下 Rabbit 中完整的消息传递模型了。</p>
+<p>让我们快速回顾一下在前面的教程中介绍过的内容：</p>
+<ul>
+<li><strong>producer (生产者)</strong> 是用来发送消息的用户应用程序。</li>
+<li><strong>queue (队列)</strong> 是用来存储消息的缓存。</li>
+<li><strong>consumer (消费者)</strong> 是用来接收消息的用户应用程序。</li>
+</ul>
+<p>RabbitMQ 中消息传递模型的核心思想是生产者永远不会直接将任何消息发送到队列中。实际上，生产者常常完全都不知道消息是否会被传递到一个队列中去。</p>
+<p>相反的，生产者只能将消息发送到 <strong>exchange (交换器)</strong> 中。交换器是一个非常简单的东西。一方面，它从生产者那里接收消息，另一方面，它将消息推送到队列中去。交换器必须确切地知道该如何处理接收到的消息。是否应该将其附加到一个特定的队列中？是否应该将其附加到许多的队列中？还是应该丢弃它呢？其中的规则由 <strong>exchange type (交换器类型)</strong> 来定义。</p>
+<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/41y33.webp!origin" srcset="/img/loading.gif" alt="交换器模型"></p>
+<p>有几种可用的交换器类型：<code>direct</code>，<code>topic</code>，<code>headers</code> 和 <code>fanout</code> 。我们主要来看最后一个 – fanout 。让我们使用这种类型创建一个交换器，并称之为 <code>logs</code> ：</p>
+<pre><code class="hljs python">channel.exchange_declare(exchange=<span class="hljs-string">'logs'</span>,
+                         exchange_type=<span class="hljs-string">'fanout'</span>)</code></pre>
+
+<p>这种 fanout 交换器非常简单。正如你从这名字中可能会猜到的，它只是将所有它接受到的消息广播给所有它知道的队列。而这正是我们的日志记录器所需要的。</p>
+<blockquote>
+<h3 id="列举出交换器"><a href="#列举出交换器" class="headerlink" title="列举出交换器"></a>列举出交换器</h3><p>为了在服务器上列出交换器，你可以使用那个非常有用的工具 <code>rabbitmqctl</code> ：</p>
+</blockquote>
+<pre><code class="hljs bash">sudo rabbitmqctl list_exchanges</code></pre>
+
+<blockquote>
+<p>在列表中可能会有一些形如 <code>amq.*</code> 的交换器及默认(未命名)的交换器。这些是默认创建的，但此刻你可能不太需要用到。</p>
+<h3 id="默认交换器"><a href="#默认交换器" class="headerlink" title="默认交换器"></a>默认交换器</h3><p>在本教程的前面部分我们对交换器一无所知，但仍然可以给队列发送消息。之所以可以这样是因为我们使用了一个由空字符串(<code>&quot;&quot;</code>)来标识的默认交换器。</p>
+<p>回想一下之前我们是怎样发布消息的：</p>
+</blockquote>
+<pre><code class="hljs python">channel.basic_publish(exchange=<span class="hljs-string">''</span>,
+                      routing_key=<span class="hljs-string">'hello'</span>,
+                      body=message)</code></pre>
+
+<blockquote>
+<p><code>exchange</code> 参数是交换器的名称。空字符串标识的是默认或未命名的交换器：消息被路由到由 <code>routing_key</code> 指定的队列中去(如果该队列存在的话)。</p>
+</blockquote>
+<p>现在，我们可以改为将消息发布到命名的交换器中：</p>
+<pre><code class="hljs python">channel.basic_publish(exchange=<span class="hljs-string">'logs'</span>,
+                      routing_key=<span class="hljs-string">''</span>,
+                      body=message)</code></pre>
+
+<h2 id="临时队列"><a href="#临时队列" class="headerlink" title="临时队列"></a>临时队列</h2><p>你可能还记得，之前我们使用已经指定了名称的队列(还记得 <code>hello</code> 和 <code>task_queue</code> 嘛？)。能够命名队列对我们来说是至关重要的 – 我们需要将工人指向同一个队列。当你想要在生产者和消费者之间共享队列时，给队列命名是非常重要的。</p>
+<p>但对于我们的日志记录器来说并不是这样的。我们希望监听所有的日志消息而不仅仅是其中的一部分。我们也只对当前正在发送的消息感兴趣，而非旧的消息。为了解决这一问题我们需要两样东西。</p>
+<p>首先，无论何时我们连接到 Rabbit ，我们都需要一个全新的空队列。为此，我们可以创建一个随机命名的队列，或者，更好的 - 让服务器为我们选择一个随机的队列名称。为此，我们可以给 <code>queue_declare</code> 提供一个空的 <code>queue</code> 参数。</p>
+<pre><code class="hljs python">result = channel.queue_declare(queue=<span class="hljs-string">''</span>)</code></pre>
+
+<p>此时，<code>result.method.queue</code> 中包含了一个随机的队列名称。例如，它可能看起来像 <code>amq.gen-JzTY20BRgKO-HjmUJj0wLg</code> 。</p>
+<p>其次，一旦消费者连接关闭，队列就应该被删除。对此有一个 <code>exclusive</code> 标志：</p>
+<pre><code class="hljs python">result = channel.queue_declare(queue=<span class="hljs-string">''</span>, exclusive=<span class="hljs-literal">True</span>)</code></pre>
+
+<p>你可以在<a href="https://www.rabbitmq.com/queues.html" target="_blank" rel="noopener">队列指南</a>上了解到更多有关 <code>exclusive</code> 标志和其他队列属性的内容。</p>
+<h2 id="绑定"><a href="#绑定" class="headerlink" title="绑定"></a>绑定</h2><p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/caxhq.png!origin" srcset="/img/loading.gif" alt="绑定模型"></p>
+<p>我们已经创建了一个 fanout 交换器和一个队列。现在我们需要告诉交换器将消息发送到我们的队列中。其中交换器和队列的关系称为绑定。</p>
+<pre><code class="hljs python">channel.queue_bind(exchange=<span class="hljs-string">'logs'</span>,
+                   queue=result.method.queue)</code></pre>
+
+<p>从现在起，<code>log</code> 交换器会将消息附加到我们的队列中。</p>
+<blockquote>
+<h3 id="列举出绑定"><a href="#列举出绑定" class="headerlink" title="列举出绑定"></a>列举出绑定</h3><p>你大概能猜到使用如下的方式列举出已经存在的绑定：</p>
+</blockquote>
+<pre><code class="hljs bash">rabbitmqctl list_bindings</code></pre>
+
+<h2 id="代码汇总"><a href="#代码汇总" class="headerlink" title="代码汇总"></a>代码汇总</h2><p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/0f8f9.png!origin" srcset="/img/loading.gif" alt="总体架构模型"></p>
+<p>用于发送日志消息的生产者程序跟前面教程中的看起来没有很大的不同。其中最重要的变化是，我们现在希望将消息发布到名为 <code>log</code> 的交换器而非未命名的交换器。在发送消息时我们需要提供 <code>routing_key</code> ，但对于 <code>fanout</code> 交换，它的值将被忽略。</p>
+<p><code>emit_log.py</code> (<a href="https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/python/emit_log.py" target="_blank" rel="noopener">source</a>)</p>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span>
+<span class="hljs-keyword">import</span> pika
+<span class="hljs-keyword">import</span> sys
+
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(host=<span class="hljs-string">'localhost'</span>))
+channel = connection.channel()
+
+channel.exchange_declare(exchange=<span class="hljs-string">'logs'</span>, exchange_type=<span class="hljs-string">'fanout'</span>)
+
+message = <span class="hljs-string">' '</span>.join(sys.argv[<span class="hljs-number">1</span>:]) <span class="hljs-keyword">or</span> <span class="hljs-string">"info: Hello World!"</span>
+channel.basic_publish(exchange=<span class="hljs-string">'logs'</span>, routing_key=<span class="hljs-string">''</span>, body=message)
+print(<span class="hljs-string">" [x] Sent %r"</span> % message)
+connection.close()</code></pre>
+
+<p>如你所见，在建立连接之后，我们才声明了这个交换器。这一步是必要的，因为将消息发布到一个不存在的交换器是被禁止的。</p>
+<p>如果没有队列绑定到交换器上，那么消息将会丢失，但这对于我们来说是没问题的。如果没有消费者在监听，我们可以安全地丢弃该消息。</p>
+<p><code>receive_logs.py</code> (<a href="https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/python/receive_logs.py" target="_blank" rel="noopener">source</a>)</p>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span>
+<span class="hljs-keyword">import</span> pika
+
+connection = pika.BlockingConnection(
+    pika.ConnectionParameters(host=<span class="hljs-string">'localhost'</span>))
+channel = connection.channel()
+
+channel.exchange_declare(exchange=<span class="hljs-string">'logs'</span>, exchange_type=<span class="hljs-string">'fanout'</span>)
+
+result = channel.queue_declare(queue=<span class="hljs-string">''</span>, exclusive=<span class="hljs-literal">True</span>)
+queue_name = result.method.queue
+
+channel.queue_bind(exchange=<span class="hljs-string">'logs'</span>, queue=queue_name)
+
+print(<span class="hljs-string">' [*] Waiting for logs. To exit press CTRL+C'</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">callback</span><span class="hljs-params">(ch, method, properties, body)</span>:</span>
+    print(<span class="hljs-string">" [x] %r"</span> % body)
+
+channel.basic_consume(
+    queue=queue_name, on_message_callback=callback, auto_ack=<span class="hljs-literal">True</span>)
+
+channel.start_consuming()</code></pre>
+
+<p>我们完成了。如果你想将日志保存为一个文件，只需要打开一个控制台并输入：</p>
+<pre><code class="hljs bash">python receive_logs.py &gt; logs_from_rabbit.log</code></pre>
+
+<p>如果你想在屏幕上查看日志，请生成一个新的终端并运行：</p>
+<pre><code class="hljs bash">python receive_logs.py</code></pre>
+
+<p>当然，要发送日志请输入：</p>
+<pre><code class="hljs bash">python emit_log.py</code></pre>
+
+<p>使用 <code>rabbitmqctl list_bindings</code> 命令，你可以验证代码是否确切地按照我们的要求创建了绑定和队列。随着两个 <code>receive_logs.py</code> 程序的执行，你应该可以看到一些类似于这样的东西：</p>
+<pre><code class="hljs bash">sudo rabbitmqctl list_bindings
+<span class="hljs-comment"># =&gt; Listing bindings ...</span>
+<span class="hljs-comment"># =&gt; logs    exchange        amq.gen-JzTY20BRgKO-HjmUJj0wLg  queue           []</span>
+<span class="hljs-comment"># =&gt; logs    exchange        amq.gen-vso0PVvyiRIL2WoV3i48Yg  queue           []</span>
+<span class="hljs-comment"># =&gt; ...done.</span></code></pre>
+
+<p>关于此结果的解释很简单：数据从 <code>logs</code> 交换器进入到两个由服务器分配名称的队列中。而这正是我们的意图。</p>
+<p>想了解如何监听消息的一部分，请前往<a href="https://www.rabbitmq.com/tutorials/tutorial-four-python.html" target="_blank" rel="noopener">教程的第 4 部分</a>。</p>
+<h2 id="生产-非-适用性免责声明"><a href="#生产-非-适用性免责声明" class="headerlink" title="生产[非]适用性免责声明"></a>生产[非]适用性免责声明</h2><p>请记住，本文或其他教程都只是教程。教程一次展示一个新的概念，并且可能会故意过度简化某些东西而忽略了其它的事物。例如，为了简洁起见，有关连接管理、错误处理、连接恢复、并发和度量收集的内容都在很大程度上被忽略了。这样简化过的代码不应该被当作是已经完成的产品。</p>
+<p>在开发您自己的应用程序之前，请先查看<a href="https://www.rabbitmq.com/documentation.html" target="_blank" rel="noopener">文档</a>的剩余部分。我们特别推荐以下部分：<a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="noopener">Publisher Confirms and Consumer Acknowledgements</a>， <a href="https://www.rabbitmq.com/production-checklist.html" target="_blank" rel="noopener">Production Checklist</a> 以及 <a href="https://www.rabbitmq.com/monitoring.html" target="_blank" rel="noopener">Monitoring</a> 。</p>
+<h2 id="获得帮助并提供反馈"><a href="#获得帮助并提供反馈" class="headerlink" title="获得帮助并提供反馈"></a>获得帮助并提供反馈</h2><p>如果您对本教程或有关 RabbitMQ 的其他内容感到疑问，请立即在 <a href="https://groups.google.com/forum/#!forum/rabbitmq-users" target="_blank" rel="noopener">RabbitMQ mailing list</a> 上提问。</p>
+<h2 id="帮助我们完善-3-版本以下的文档"><a href="#帮助我们完善-3-版本以下的文档" class="headerlink" title="帮助我们完善 3 版本以下的文档"></a>帮助我们完善 3 版本以下的文档</h2><p>如果你想对本网站做出改进，可以在 <a href="https://github.com/rabbitmq/rabbitmq-website" target="_blank" rel="noopener">Github</a> 上找到它的源码。只需要 fork 源仓库并提交一条 pull 请求。非常感谢！</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/RabbitMQ/">RabbitMQ</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Python3/">Python3</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="nofollow noopener noopener">CC BY-NC-ND 4.0 许可协议</a>。转载请注明来自 <a href="https://www.keviny.site/">Kev1n's Blog</a>！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/22/Huawei-mirror-live/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于Airserver的Huawei手机简易投屏直播服务搭建过程全记录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/09/21/RabbitMQ-official-tutorials-2/">
+                        <span class="hidden-mobile">RabbitMQ官方系列教程[翻译] - 2. Work queues (Python版)</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <div class="comments" id="comments">
+                
+                
+  <script defer src="https://utteranc.es/client.js"
+          repo="KevinY999/keviny999.github.io"
+          issue-term="title"
+  
+          theme="github-light"
+          crossorigin="anonymous"
+  >
+  </script>
+
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <span>驱动: </span>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+      <span>主题: </span>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span>
+      </a>
+    </div>
+    
+  <div>
+    
+      <!-- 不蒜子统计PV -->
+      
+      <span id="busuanzi_container_site_pv" style="display: none">
+      总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    </span>
+    
+    
+      <!-- 不蒜子统计UV -->
+      
+      <span id="busuanzi_container_site_uv" style="display: none">
+      总访客数 <span id="busuanzi_value_site_uv"></span> 人
+    </span>
+    
+  </div>
+
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/main.js" ></script>
+
+
+  <script  src="/js/lazyload.js" ></script>
+
+
+
+  
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: '.post-content',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+<!-- Plugins -->
+
+
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-143604803-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "RabbitMQ官方系列教程[翻译] - 3. Publish / Subscribe (Python版)&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      getSearchFile(path);
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
