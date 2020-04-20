@@ -205,14 +205,14 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-two-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-two-python.html</a></p>
+              <p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/qsd0i.png" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-two-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-two-python.html</a></p>
 <a id="more"></a>
 
 <blockquote>
 <h3 id="预先准备"><a href="#预先准备" class="headerlink" title="预先准备"></a>预先准备</h3><p>这篇教程假定 RabbitMQ 已经完成<a href="https://www.rabbitmq.com/download.html" target="_blank" rel="noopener">安装</a>并且运行在 <code>localhost</code> 及标准端口 <code>5672</code> 上。如果你使用了一个不同的主机地址、端口或者凭据，则需要依此调整一下连接设置。</p>
 </blockquote>
 <h2 id="预先准备-1"><a href="#预先准备-1" class="headerlink" title="预先准备"></a>预先准备</h2><p>与其他 Python 教程一样，我们将使用版本号为 <a href="https://pika.readthedocs.io/en/stable/" target="_blank" rel="noopener">1.0.0</a> 的 <a href="https://pypi.python.org/pypi/pika" target="_blank" rel="noopener">Pika</a> RabbitMQ 客户端。</p>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/god0z.webp!origin" srcset="/img/loading.gif" alt="工作队列模型"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/god0z.webp" srcset="/img/loading.gif" alt="工作队列模型"></p>
 <h2 id="本章重点"><a href="#本章重点" class="headerlink" title="本章重点"></a>本章重点</h2><p>在<a href="https://www.keviny.site/2019/09/21/RabbitMQ-official-tutorials-1/">第一篇教程</a>里，我们写了向一个已命名的队列发送并从中接受消息的两个程序。在这篇教程里，我们将创建一个 <strong>Work Queue (工作队列)</strong> ，该队列用于在多个 <strong>workers (工人)</strong> 之间分配耗时任务。</p>
 <p>Work Queues (工作队列)(又名：<strong>Task Queues (任务队列)</strong>)的核心思想是，避免立即执行资源密集型任务并且不得不等待它完成的情形。相反的，我们安排任务稍后再完成。我们将 <strong>task (任务)</strong> 封装成一条消息，并将它发送到队列中去。在后台运行的工人进程将抛出任务并且最终执行这项作业。当你运行了很多工人进程时，任务会在它们之间共享。</p>
 <p>这个概念在web应用程序中尤其有用，这些应用程序无法在一个短的HTTP请求窗口期间处理一个复杂的任务。</p>
@@ -317,7 +317,7 @@ channel.basic_consume(queue=<span class="hljs-string">'hello'</span>, on_message
 </blockquote>
 <h2 id="公平派遣"><a href="#公平派遣" class="headerlink" title="公平派遣"></a>公平派遣</h2><p>你可能已经注意到了，调度仍然无法完全按照我们的要求来进行。例如，在有两个工人的情况下，当所有单数消息都很庞大而双数消息都很轻量时，一个工人会一直非常忙碌，而另一个工人却几乎不做什么工作。好吧，RabbitMQ 对此一无所知，它依然只会平均分配消息。</p>
 <p>出现这种情况的原因是，RabbitMQ 在消息进入队列的时候只是将其分配出去。它并不会查看消费者未确认消息的数量。它只会盲目地将每第 n 条消息发送给第 n 个消费者。</p>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/8gjj6.webp!origin" srcset="/img/loading.gif" alt="公平派遣模型"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/8gjj6.webp" srcset="/img/loading.gif" alt="公平派遣模型"></p>
 <p>为了克服这一问题，我们可以将 <code>basic.qos</code> 方法与 <code>prefetch_count=1</code> 设置一起使用。这会告诉 RabbitMQ 一次不要给工人一条以上的消息。换言之，在工人完成处理并确认上一条消息前不要再给它分配一条新的消息。而是将消息分配给下一个不忙的工人。</p>
 <pre><code class="hljs python">channel.basic_qos(prefetch_count=<span class="hljs-number">1</span>)</code></pre>
 

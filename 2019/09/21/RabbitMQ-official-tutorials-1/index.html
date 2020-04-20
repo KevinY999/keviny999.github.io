@@ -205,7 +205,7 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-one-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-one-python.html</a></p>
+              <p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/qsd0i.png" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-one-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-one-python.html</a></p>
 <a id="more"></a>
 
 <blockquote>
@@ -217,21 +217,21 @@
 <ul>
 <li><strong>Producing</strong> 指的是发送。一个负责发送消息的程序就是一个 <strong>producer</strong> ：</li>
 </ul>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/12lv4.webp!origin" srcset="/img/loading.gif" alt="生产者"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/12lv4.webp" srcset="/img/loading.gif" alt="生产者"></p>
 <ul>
 <li><strong>Queue</strong> 是邮筒在 RabbitMQ 中的名字。尽管消息会流经 RabbitMQ 和你的程序，但它们只能被储存在一个 queue (队列)中。队列只约束于主机内存和磁盘限制，它本质上是一个大的消息缓冲区。许多的 <strong>producers</strong> (生产者)可以将消息发送到一个队列中，许多的 <strong>consumers</strong> (消费者)也可以尝试从一个队列中获取数据。我们是这样表示一个队列的：</li>
 </ul>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/b1lfl.webp!origin" srcset="/img/loading.gif" alt="队列"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/b1lfl.webp" srcset="/img/loading.gif" alt="队列"></p>
 <ul>
 <li><strong>Consuming</strong> 和接收的意思类似。<strong>consumer</strong> (消费者)是一个主要用来等待接收消息的程序：</li>
 </ul>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/8x9cc.webp!origin" srcset="/img/loading.gif" alt="消费者"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/8x9cc.webp" srcset="/img/loading.gif" alt="消费者"></p>
 <p>请注意，producer (生产者)、consumer (消费者)以及 broker (协商器)并非一定要存在于同一台主机上；实际上，在大多数的程序中，它们并没有放在一起。一个应用程序即可以是生产者，也可以是消费者。</p>
 <h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World!"></a>Hello World!</h2><p><strong>(使用 Python 的 Pika 客户端)</strong></p>
 <p>在教程的这个部分，我们将要用 Python 写两个小的程序：一个生产者(发送者)程序，用来发送单条信息；以及一个消费者(接收者)程序，用来接收消息并打印。这是消息传递的”Hello World”级程序。</p>
 <p>在下图中，”P”是我们的生产者，”C”是我们的消费者。中间的盒子是一个队列 - 即 RabbitMQ 为消费者保留的一个消息缓存。</p>
 <p>我们的总体设计看起来像这样：</p>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/bp3u7.webp!origin" srcset="/img/loading.gif" alt="生产者、队列、消费者模型"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/bp3u7.webp" srcset="/img/loading.gif" alt="生产者、队列、消费者模型"></p>
 <p>生产者发送消息到名为”hello”的队列中。消费者则从这个队列中接收消息。</p>
 <blockquote>
 <h3 id="RabbitMQ-知识库"><a href="#RabbitMQ-知识库" class="headerlink" title="RabbitMQ 知识库"></a>RabbitMQ 知识库</h3><p>RabbitMQ 使用多种协议。这篇教程使用的是 AMQP 0-9-1，这是一个开放的、通用的消息传递协议。RabbitMQ 有许多用不同语言实现的客户端。在本教程系列中，我们将要使用的是 Pika 1.0.0，这是一个由RabbitMQ团队推荐的 Python 客户端。你可以使用 <code>pip</code> 包管理工具来安装它：</p>
@@ -239,7 +239,7 @@
 <pre><code class="hljs bash">python -m pip install pika --upgrade</code></pre>
 
 <p>现在我们的 Pika 已经安装完成了，我们可以开始写一些代码了。</p>
-<h2 id="Sending-发送"><a href="#Sending-发送" class="headerlink" title="Sending (发送)"></a>Sending (发送)</h2><p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/dvm86.webp!origin" srcset="/img/loading.gif" alt="生产者发送模型"></p>
+<h2 id="Sending-发送"><a href="#Sending-发送" class="headerlink" title="Sending (发送)"></a>Sending (发送)</h2><p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/dvm86.webp" srcset="/img/loading.gif" alt="生产者发送模型"></p>
 <p>我们的第一个程序 <code>send.py</code> 将会发送单条消息到队列中。我们要做的第一件事情就是与 RabbitMQ 服务器建立一条连接。</p>
 <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span>
 <span class="hljs-keyword">import</span> pika
@@ -264,7 +264,7 @@ print(<span class="hljs-string">" [x] Sent 'Hello World!'"</span>)</code></pre>
 <blockquote>
 <h3 id="发送失败了！"><a href="#发送失败了！" class="headerlink" title="发送失败了！"></a>发送失败了！</h3><p>如果这是你第一次使用 RabbitMQ ，并且没有看到那条 “Sent” 的输出消息，那么你可能会抓耳挠腮并好奇是哪里出了问题。有可能是协商器启动时已经没有足够可用的磁盘空间了(默认情况下它至少需要 200 MB的空闲空间)，因此它拒绝了接收消息。检查一下协商器的日志文件以确认并在必要情况下降低这个限制。<a href="https://www.rabbitmq.com/configure.html#config-items" target="_blank" rel="noopener">有关配置文件的文档</a>将会告诉你如何设置 <code>disk_free_limit</code> 。</p>
 </blockquote>
-<h2 id="Receiving-接收"><a href="#Receiving-接收" class="headerlink" title="Receiving (接收)"></a>Receiving (接收)</h2><p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/w5kmn.webp!origin" srcset="/img/loading.gif" alt="消费者接收模型"></p>
+<h2 id="Receiving-接收"><a href="#Receiving-接收" class="headerlink" title="Receiving (接收)"></a>Receiving (接收)</h2><p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/w5kmn.webp" srcset="/img/loading.gif" alt="消费者接收模型"></p>
 <p>我们的第二个程序 <code>receive.py</code> 将要从队列中接收消息并将它们打印在屏幕上。</p>
 <p>再一次的，我们首先要连接到 RabbitMQ 服务器。有关连接到 Rabbit 的代码跟前面是一样的。</p>
 <p>下一步，像前面一样，需要确保目标队列确切存在。使用 <code>queue_declare</code> 来创建一个队列是幂等的 - 我们想运行这条命令多少次就可以运行多少次，因为只会创建一个队列。</p>

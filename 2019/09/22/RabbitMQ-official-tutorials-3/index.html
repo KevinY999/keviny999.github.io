@@ -205,7 +205,7 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-three-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-three-python.html</a></p>
+              <p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/qsd0i.png" srcset="/img/loading.gif" alt=""><br>官方地址：<a href="https://www.rabbitmq.com/tutorials/tutorial-three-python.html" target="_blank" rel="noopener">https://www.rabbitmq.com/tutorials/tutorial-three-python.html</a></p>
 <a id="more"></a>
 
 <blockquote>
@@ -225,7 +225,7 @@
 </ul>
 <p>RabbitMQ 中消息传递模型的核心思想是生产者永远不会直接将任何消息发送到队列中。实际上，生产者常常完全都不知道消息是否会被传递到一个队列中去。</p>
 <p>相反的，生产者只能将消息发送到 <strong>exchange (交换器)</strong> 中。交换器是一个非常简单的东西。一方面，它从生产者那里接收消息，另一方面，它将消息推送到队列中去。交换器必须确切地知道该如何处理接收到的消息。是否应该将其附加到一个特定的队列中？是否应该将其附加到许多的队列中？还是应该丢弃它呢？其中的规则由 <strong>exchange type (交换器类型)</strong> 来定义。</p>
-<p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/41y33.webp!origin" srcset="/img/loading.gif" alt="交换器模型"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/41y33.webp" srcset="/img/loading.gif" alt="交换器模型"></p>
 <p>有几种可用的交换器类型：<code>direct</code>，<code>topic</code>，<code>headers</code> 和 <code>fanout</code> 。我们主要来看最后一个 – fanout 。让我们使用这种类型创建一个交换器，并称之为 <code>logs</code> ：</p>
 <pre><code class="hljs python">channel.exchange_declare(exchange=<span class="hljs-string">'logs'</span>,
                          exchange_type=<span class="hljs-string">'fanout'</span>)</code></pre>
@@ -263,7 +263,7 @@
 <pre><code class="hljs python">result = channel.queue_declare(queue=<span class="hljs-string">''</span>, exclusive=<span class="hljs-literal">True</span>)</code></pre>
 
 <p>你可以在<a href="https://www.rabbitmq.com/queues.html" target="_blank" rel="noopener">队列指南</a>上了解到更多有关 <code>exclusive</code> 标志和其他队列属性的内容。</p>
-<h2 id="绑定"><a href="#绑定" class="headerlink" title="绑定"></a>绑定</h2><p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/caxhq.png!origin" srcset="/img/loading.gif" alt="绑定模型"></p>
+<h2 id="绑定"><a href="#绑定" class="headerlink" title="绑定"></a>绑定</h2><p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/caxhq.png" srcset="/img/loading.gif" alt="绑定模型"></p>
 <p>我们已经创建了一个 fanout 交换器和一个队列。现在我们需要告诉交换器将消息发送到我们的队列中。其中交换器和队列的关系称为绑定。</p>
 <pre><code class="hljs python">channel.queue_bind(exchange=<span class="hljs-string">'logs'</span>,
                    queue=result.method.queue)</code></pre>
@@ -274,7 +274,7 @@
 </blockquote>
 <pre><code class="hljs bash">rabbitmqctl list_bindings</code></pre>
 
-<h2 id="代码汇总"><a href="#代码汇总" class="headerlink" title="代码汇总"></a>代码汇总</h2><p><img src="https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/0f8f9.png!origin" srcset="/img/loading.gif" alt="总体架构模型"></p>
+<h2 id="代码汇总"><a href="#代码汇总" class="headerlink" title="代码汇总"></a>代码汇总</h2><p><img src="https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/0f8f9.png" srcset="/img/loading.gif" alt="总体架构模型"></p>
 <p>用于发送日志消息的生产者程序跟前面教程中的看起来没有很大的不同。其中最重要的变化是，我们现在希望将消息发布到名为 <code>log</code> 的交换器而非未命名的交换器。在发送消息时我们需要提供 <code>routing_key</code> ，但对于 <code>fanout</code> 交换，它的值将被忽略。</p>
 <p><code>emit_log.py</code> (<a href="https://github.com/rabbitmq/rabbitmq-tutorials/blob/master/python/emit_log.py" target="_blank" rel="noopener">source</a>)</p>
 <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python</span>
