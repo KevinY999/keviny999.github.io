@@ -5,7 +5,7 @@ categories: 消息队列
 tags: [RabbitMQ,Python3]
 ---
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/qsd0i.png)
 官方地址：https://www.rabbitmq.com/tutorials/tutorial-three-python.html
 
 <!-- more -->
@@ -42,7 +42,7 @@ RabbitMQ 中消息传递模型的核心思想是生产者永远不会直接将�
 
 相反的，生产者只能将消息发送到 **exchange (交换器)** 中。交换器是一个非常简单的东西。一方面，它从生产者那里接收消息，另一方面，它将消息推送到队列中去。交换器必须确切地知道该如何处理接收到的消息。是否应该将其附加到一个特定的队列中？是否应该将其附加到许多的队列中？还是应该丢弃它呢？其中的规则由 **exchange type (交换器类型)** 来定义。
 
-![交换器模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/41y33.webp!origin)
+![交换器模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/41y33.webp)
 
 有几种可用的交换器类型：`direct`，`topic`，`headers` 和 `fanout` 。我们主要来看最后一个 -- fanout 。让我们使用这种类型创建一个交换器，并称之为 `logs` ：
 
@@ -109,7 +109,7 @@ result = channel.queue_declare(queue='', exclusive=True)
 
 ## 绑定
 
-![绑定模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/caxhq.png!origin)
+![绑定模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/caxhq.png)
 
 我们已经创建了一个 fanout 交换器和一个队列。现在我们需要告诉交换器将消息发送到我们的队列中。其中交换器和队列的关系称为绑定。
 
@@ -130,7 +130,7 @@ rabbitmqctl list_bindings
 
 ## 代码汇总
 
-![总体架构模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/0f8f9.png!origin)
+![总体架构模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/0f8f9.png)
 
 用于发送日志消息的生产者程序跟前面教程中的看起来没有很大的不同。其中最重要的变化是，我们现在希望将消息发布到名为 `log` 的交换器而非未命名的交换器。在发送消息时我们需要提供 `routing_key` ，但对于 `fanout` 交换，它的值将被忽略。
 

@@ -15,41 +15,41 @@ tags: [Huawei,Nginx,Rtmp,Airserver]
 
 为了实现远距离的扫码登录，参考各大直播平台主播代练的方法，我决定也使用直播这种方式来完成这波操作。但问题是**贫穷**限制了我只有一台手机，并且已经安装了微信 app ，如何在不删除现有微信的情况下建立一个没有微信 app 的环境成为一个问题；并且我也不想为此就去某个平台注册一个主播号，因为太麻烦，那只能自己手动搭建一个直播环境了。**大致的思路就是：利用一个独立的无微信的空间，在其中安装跑跑手游 app 并打开二维码登录界面，将手机投屏到我的 Mac 电脑端，通过 OBS 工具推流到服务器，我的好友访问对应的直播地址进行观看并扫码。**思路大概有了，那么就去实践一下吧。
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/vaylf.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/vaylf.png)
 
 ## 填坑一：在一台手机上建立有微信 app 和没有微信 app 的两种环境
 
 + **方法 1 **：不知什么时候开始，时常能在小红书、抖音、微博上看到大吹华为手机自带的**隐私空间**功能的短视频，官方介绍为：隐私空间是一个可存储私人数据、**独立**于主空间的私密空间。面对第一个问题，我第一反应便是这个。具体的开启路径为 [设置] -> [安全和隐私] -> [隐私空间] -> [开启] 。
 
-![华为隐私空间](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/kc7j7.jpg!origin)
+![华为隐私空间](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/kc7j7.jpg)
 
 + **方法 2 **：当然，创建另一个独立空间的方法肯定不止隐私空间这一种，另一个可行的方法是，利用华为的**多账户功能**。具体设置路径为 [设置] -> [用户和账户] -> [多用户] -> [添加用户] 。
 
-![华为多账户](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/o8iif.png!origin)
+![华为多账户](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/o8iif.png)
 
 新建账户之后需要进行设置，跳过网络连接的步骤便无需登录华为账户，设置完成后，可以通过点击通知栏上方的头像切换回主账户。
 
-![账户切换1](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/xxh0u.png!origin)
+![账户切换1](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/xxh0u.png)
 
-![账户切换2](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/4naij.png!origin)
+![账户切换2](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/4naij.png)
 
 ## 填坑二：将华为手机投屏到 Mac 端
 
 这里采用一个牛逼的工具 —— [**AirServer for MacOS**](https://www.airserver.com/Mac) 。
 
-![AirServer-logo](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/6x4ub.png!origin)
+![AirServer-logo](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/6x4ub.png)
 
 引用官方的介绍：AirServer is the most advanced screen mirroring receiver for Mac and PC. It allows you to receive AirPlay and Google Cast streams, similar to an Apple TV or a Chromecast device.
 
 AirServer 是一款收费软件，Mac 版有三个价格，当然也可以免费试用 14 天：
 
-![AirServer for MacOS 价格](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/b8457.png!origin)
+![AirServer for MacOS 价格](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/b8457.png)
 
 网上有很多的破解版，不过还是建议大家购买正版，支持一下这款非常优秀的软件，我先买为敬。(官方支持信用卡及 PayPal 付款)
 
 AirServer for MacOS 并没有可视化的主界面，只有设置界面：
 
-![AirServer 设置界面截图](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/6mfnj.png!origin)
+![AirServer 设置界面截图](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/6mfnj.png)
 
 这里几乎无需设置，只需要设置一下计算机名称便可直接使用。
 
@@ -61,51 +61,51 @@ AirServer for MacOS 并没有可视化的主界面，只有设置界面：
 
 1、点击 Mac 端最上方菜单栏中 AirServer 的图标，选择  `Show QR Code` 选项，如图：
 
-![打开 AirServer 连接二维码](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/yu73v.png!origin)
+![打开 AirServer 连接二维码](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/yu73v.png)
 
 2、打开手机端的 AirServer Connect 应用程序，点击上方的二维码图标，扫码 Mac 端二维码进行连接，如图：
 
-![AirServer Connect 扫码连接](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/8tv19.png!origin)
+![AirServer Connect 扫码连接](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/8tv19.png)
 
 当然，如果知道 Mac 端的局域网地址，也可以在 AirServer Connect 应用程序右上角的菜单栏中点击`连接到...` ，输入 Mac 端的局域网地址进行快速连接，如图：
 
-![选择"连接到..."选项](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/2b3v0.png!origin)
+![选择"连接到..."选项](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/2b3v0.png)
 
-![输入 Mac 端地址](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/j0whs.png!origin)
+![输入 Mac 端地址](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/j0whs.png)
 
 连接完成后，Mac 端会弹出手机投屏的对话框，如图：
 
-![AirServer Connect 连接成功](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/utal0.png!origin)
+![AirServer Connect 连接成功](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/utal0.png)
 
 ### Google Home 连接方法
 
 1、在 Mac 端的 AirServer 设置中勾选 `Enable Google Cast` ，如图：
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/5ubdf.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/5ubdf.png)
 
-2、打开 Google Home 应用程序，切换到最后的![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/y7s6z.png!origin)`账户信息`标签页；
+2、打开 Google Home 应用程序，切换到最后的![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/y7s6z.png)`账户信息`标签页；
 
 3、向下滑动选择`镜像设备内容`选项，如图：
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/3lzvi.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/3lzvi.png)
 
 4、进入镜像设备内容后，点击`投射屏幕/音频`按钮，程序会自动搜索同一局域网络下支持投射的设备，如图：
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/luuvu.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/luuvu.png)
 
 5、选择要投射到的设备，如图：
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/rq5mj.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/rq5mj.png)
 
 ### 两种投屏方式比较
 
 1、投屏功能：二者都能够将手机画面投射到 Mac 端，但出于谷歌某些安全机制原因，AirServer Connect 无法将手机设备的声音也投射过去，而 Google Home 可以，具体原因如图：
 
-![AirServer Connect 无法投射声音原因](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/3vzek.png!origin)
+![AirServer Connect 无法投射声音原因](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/3vzek.png)
 
 2、投屏效率：作为 AirServer 官方出品的手机客户端，AirServer Connect 当然能够更高效地将画面投射到客户端，而 AirServer 同样兼容的 Google Cast 功能则效率相对会低一点，在打开 Goolge Home 的投屏功能时，该应用程序也会弹出一个提示框，如图：
 
-![Google Cast设备未优化警告](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/jtck5.png!origin)
+![Google Cast设备未优化警告](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/jtck5.png)
 
 这种情况下，经过实测，画面可能会有少许掉帧，没有 AirServer Connect 那么流畅，但是能将声音投射给 Mac 端，还是能接受的。
 
@@ -113,9 +113,9 @@ AirServer for MacOS 并没有可视化的主界面，只有设置界面：
 
 这是由于华为手机自带的手机管家默认对应用启动权限进行了自动托管，只需要对 AirServer Connect 这一应用关闭自动托管功能就好，具体操作方法为：[手机管家] -> [应用启动管理] -> [将 AirServer Connect 后的开关拨至手动管理状态] -> [在弹出的窗口中将三个开关都拨至打开状态]。如图：
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/y82pj.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/y82pj.png)
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/6wbgx.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/6wbgx.png)
 
 这样，AirServer Connect 应用程序就能保持在后台运行不会被安卓系统自动回收了。
 
@@ -123,7 +123,7 @@ AirServer for MacOS 并没有可视化的主界面，只有设置界面：
 
 在华为手机的子账户或隐私空间中，手机管家这一应用程序中，只有流量管理和电池管理两个选项，其余部分都无法进入，如图：
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/ozaap.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/ozaap.png)
 
 解决方法：进入主账户的手机管家中进行设置，**子账户中的权限将与主账户中设置的同步**。
 
@@ -469,11 +469,11 @@ rtmp {
 
 打开 OBS 工具的设置界面，选择左侧的 `推流` 标签页，如图：
 
-![进行推流设置](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/58a0a.png!origin)
+![进行推流设置](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/58a0a.png)
 
 在右侧 `服务器` 部分填入上面 nginx.conf 中设置的 rtmp 推流地址，如图：
 
-![填入推流地址](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/4wzri.png!origin)
+![填入推流地址](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/4wzri.png)
 
 设置完成后，回到 OBS 主界面，添加`Syphon客户端`，选择 AirServer 的投屏窗口，然后在右侧点击 `开始推流` ，稍等片刻，刷新我们的播放器界面，便能收看到直播的内容了。
 
@@ -483,11 +483,11 @@ rtmp {
 
 在安装完成该插件后，进入到 `应用程序` ，打开 `音频 MIDI 设置` ，如图：
 
-![音频MIDI设置](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/htkob.png!origin)
+![音频MIDI设置](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/htkob.png)
 
 进入设置后，点击左下方的 `+` 号按钮，选择第二项 `多输出设备` ，在右侧勾选 `内建输出` 和 `Soundflower (2ch)` 选项，如图：
 
-![新建多输出设备](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/fm1xt.png!origin)
+![新建多输出设备](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/fm1xt.png)
 
 这样，就可以在保持监听的同时，将 mac 内播放的声音录入，可以在使用 OBS 工具直播的同时播放音乐，增加直播的乐趣。
 

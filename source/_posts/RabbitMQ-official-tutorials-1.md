@@ -5,7 +5,7 @@ categories: 消息队列
 tags: [RabbitMQ,Python3]
 ---
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/qsd0i.png)
 官方地址：https://www.rabbitmq.com/tutorials/tutorial-one-python.html
 
 <!-- more -->
@@ -24,15 +24,15 @@ RabbitMQ 和消息传递会使用到一些专业术语。
 
 * **Producing** 指的是发送。一个负责发送消息的程序就是一个 **producer** ：
 
-![生产者](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/12lv4.webp!origin)
+![生产者](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/12lv4.webp)
 
 * **Queue** 是邮筒在 RabbitMQ 中的名字。尽管消息会流经 RabbitMQ 和你的程序，但它们只能被储存在一个 queue (队列)中。队列只约束于主机内存和磁盘限制，它本质上是一个大的消息缓冲区。许多的 **producers** (生产者)可以将消息发送到一个队列中，许多的 **consumers** (消费者)也可以尝试从一个队列中获取数据。我们是这样表示一个队列的：
 
-![队列](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/b1lfl.webp!origin)
+![队列](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/b1lfl.webp)
 
 * **Consuming** 和接收的意思类似。**consumer** (消费者)是一个主要用来等待接收消息的程序：
 
-![消费者](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/8x9cc.webp!origin)
+![消费者](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/8x9cc.webp)
 
 请注意，producer (生产者)、consumer (消费者)以及 broker (协商器)并非一定要存在于同一台主机上；实际上，在大多数的程序中，它们并没有放在一起。一个应用程序即可以是生产者，也可以是消费者。
 
@@ -46,7 +46,7 @@ RabbitMQ 和消息传递会使用到一些专业术语。
 
 我们的总体设计看起来像这样：
 
-![生产者、队列、消费者模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/bp3u7.webp!origin)
+![生产者、队列、消费者模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/bp3u7.webp)
 
 生产者发送消息到名为"hello"的队列中。消费者则从这个队列中接收消息。
 
@@ -62,7 +62,7 @@ python -m pip install pika --upgrade
 
 ## Sending (发送)
 
-![生产者发送模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/dvm86.webp!origin)
+![生产者发送模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/dvm86.webp)
 
 我们的第一个程序 `send.py` 将会发送单条消息到队列中。我们要做的第一件事情就是与 RabbitMQ 服务器建立一条连接。
 
@@ -105,7 +105,7 @@ connection.close()
 
 ## Receiving (接收)
 
-![消费者接收模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/w5kmn.webp!origin)
+![消费者接收模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/w5kmn.webp)
 
 我们的第二个程序 `receive.py` 将要从队列中接收消息并将它们打印在屏幕上。
 

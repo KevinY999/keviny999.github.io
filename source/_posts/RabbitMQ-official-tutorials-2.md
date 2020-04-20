@@ -5,7 +5,7 @@ categories: 消息队列
 tags: [RabbitMQ,Python3]
 ---
 
-![](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/qsd0i.png!origin)
+![](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/qsd0i.png)
 官方地址：https://www.rabbitmq.com/tutorials/tutorial-two-python.html
 
 <!-- more -->
@@ -18,7 +18,7 @@ tags: [RabbitMQ,Python3]
 
 与其他 Python 教程一样，我们将使用版本号为 [1.0.0](https://pika.readthedocs.io/en/stable/) 的 [Pika](https://pypi.python.org/pypi/pika) RabbitMQ 客户端。
 
-![工作队列模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/god0z.webp!origin)
+![工作队列模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/god0z.webp)
 
 ## 本章重点
 
@@ -190,7 +190,7 @@ channel.basic_publish(exchange='',
 
 出现这种情况的原因是，RabbitMQ 在消息进入队列的时候只是将其分配出去。它并不会查看消费者未确认消息的数量。它只会盲目地将每第 n 条消息发送给第 n 个消费者。
 
-![公平派遣模型](https://kevin-blog-pic.oss-cn-shenzhen.aliyuncs.com/8gjj6.webp!origin)
+![公平派遣模型](https://cdn.jsdelivr.net/gh/KevinY999-pic/Kev1nBlog/8gjj6.webp)
 
 为了克服这一问题，我们可以将 `basic.qos` 方法与 `prefetch_count=1` 设置一起使用。这会告诉 RabbitMQ 一次不要给工人一条以上的消息。换言之，在工人完成处理并确认上一条消息前不要再给它分配一条新的消息。而是将消息分配给下一个不忙的工人。
 
